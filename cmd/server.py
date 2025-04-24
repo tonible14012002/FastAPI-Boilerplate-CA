@@ -43,10 +43,12 @@ app.add_exception_handler(Exception, unhandled_exception_handler)
 app.add_exception_handler(RequestValidationError, request_validation_exception_handler)
 
 # Initialize services
-redis_cache = redis.RedisCache()
+redis_cache = redis.RedisCache.initialize(settings.REDIS_DSN)
 cache_store = cache_store.CacheStore(cache=redis_cache)
 
-google_geocode = google_geocode.GoogleGeocodeService()
+google_geocode = google_geocode.GoogleGeocoder(
+    api_key=settings.GOOGLE_GEOCODE_API_KEY
+)
 
 geocode_service = services.GeocodeService(
     geocoder=google_geocode,
@@ -57,6 +59,10 @@ entities = Entities(
     geocode_service=geocode_service
 )
 
+# Bind entities to handlers
+v1_routes.geocode.router.set_entities(entities),
+
+# Bind routes
 app.include_router(
     v1_routes.geocode.router,
     prefix="/api/v1/geocode",

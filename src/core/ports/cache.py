@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from typing import Optional, List
+from src.core import domain
 
 __all__ = [
     "ICache",
@@ -9,45 +11,67 @@ class ICache(ABC):
     """
     Interface for cache operations.
     """
+    @abstractmethod
+    async def set(
+        self,
+        key: str,
+        value: str,
+        expire: Optional[int] = None, # Miliseconds,
+        not_existed_only: Optional[bool] = False,
+        existed_only: Optional[bool] = False,
+        expire_time_stamp: Optional[int] = None, # Miliseconds
+        keep_ttl: Optional[bool] = False, # Keep the time to live of the key
+    ):
+        """
+        Set a value in the cache with an optional expiration time.
+        """
 
     @abstractmethod
-    async def get(self, key: str) -> str:
+    async def get(self, key: str) -> Optional[str]:
         """
-        Get a value from the cache by key.
+        Get a value from the cache.
         """
-        raise NotImplementedError
-
+    
     @abstractmethod
-    async def set(self, key: str, value: str) -> None:
+    async def delete(self, *keys: str):
         """
-        Set a value in the cache with a key.
+        Delete a key from the cache.
         """
-        raise NotImplementedError
-
+    
     @abstractmethod
-    async def delete(self, key: str) -> None:
+    async def expire(
+        self,
+        key: str,
+        expire: int,
+        not_existed_only: Optional[bool] = False,
+        existed_only: Optional[bool] = False,
+        gt_only: Optional[bool] = False, # greated than exited expiration only
+        lt_only: Optional[bool] = None, # less than expiration time
+    ) -> bool:
         """
-        Delete a value from the cache by key.
+        Set the expiration time for a key in seconds.
         """
-        raise NotImplementedError
+        pass
+    
+    @abstractmethod
+    async def close(self) -> None:
+        """
+        Close the cache connection.
+        """
 
 class ICacheStore(ABC):
     """
-    Interface for geocode cache operations.
+    Interface cache store.
     """
 
     @abstractmethod
-    async def get_geocode(self, key: str) -> str:
+    def get_geocode(self, address: str) -> Optional[List[domain.GeocodeResult]]:
         """
-        Get a geocode from the cache by key.
+        Get the geocode for a given address.
         """
-        raise NotImplementedError
-    
+
     @abstractmethod
-    async def set_geocode(self, key: str, value: str) -> None:
+    def set_geocode(self, address: str, geocode: List[domain.GeocodeResult]) -> None:
         """
-        Set a geocode in the cache with a key.
+        Set the geocode for a given address.
         """
-        raise NotImplementedError
-    
-    # NOTE: Add domain specific Cache Methods ...

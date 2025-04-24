@@ -1,8 +1,9 @@
 
-install-desp:
+install-deps:
 	@ poetry install
 
 dev:
-	@./scrips/server.sh
+	@docker compose -f local.yml up --build -d --remove-orphans
+	@./scripts/server.sh
 
-.PHONY: install-desp dev
+.PHONY: install-deps dev

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import *
 from .. import domain
 
 
@@ -8,7 +9,7 @@ class IGeocode(ABC):
     """
     
     @abstractmethod
-    async def geocode(self, address: str) -> domain.Geocode:
+    async def geocode(self, address: str) -> List[domain.GeocodeResult]:
         """
         Geocode an address to get its latitude and longitude.
 

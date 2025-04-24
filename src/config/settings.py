@@ -7,6 +7,6 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     API_SECRET_KEY: str
-
+    REDIS_DSN: str = "redis://default:devpassword@localhost:6379/0"
 
 settings = Settings(_env_file='.env', _env_file_encoding='utf-8')

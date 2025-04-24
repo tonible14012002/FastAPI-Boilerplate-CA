@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  redis:
+    image: redis:alpine
+    container_name: dev-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - local_redis_data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass devpassword
+    networks:
+      - proxy-api
+
+networks:
+  proxy-api:
+    driver: bridge
+
+volumes:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
+  local_redis_data: {}
+  local_es_data: {}
+  local_scylla_data: {}

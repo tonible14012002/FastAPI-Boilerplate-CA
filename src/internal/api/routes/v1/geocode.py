@@ -1,18 +1,18 @@
-from src.internal.api.routes.base import BaseAPIRouter
 from src.core import domain
+from src.internal.api.routes.base import BaseAPIRouter
+from typing import List
 
 class GeocodeAPIRouter(BaseAPIRouter):
     pass
 
 router = GeocodeAPIRouter(
-    tags=["v1-geocode"],
+    tags=["v1/geocode"],
 )
 
-
-@router.post(
+@router.get(
     "/search",
     status_code=200,
-    response_model=domain.Geocode,
+    response_model=List[domain.GeocodeResult],
 )
 async def geocode(
     address: str,
@@ -21,5 +21,5 @@ async def geocode(
     Geocode an address.
     """
     # Get the geocode from the cache
-    location = router.entities.geocode_service.get_location(address=address)
+    location = await router.entities.geocode_service.get_locations(address=address)
     return location

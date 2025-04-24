@@ -20,7 +20,13 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> Plain
     Unhandled exceptions are all exceptions that are not HTTPExceptions or RequestValidationErrors.
     """
     headers = getattr(exc, "headers", None)
-    return JSONResponse({"detail": str(exc)}, status_code=500, headers=headers)
+    status_code = getattr(exc, "status_code", 500)
+    error = getattr(exc, "error", "Internal Server Error")
+
+    return JSONResponse({
+        "message": str(exc),
+        "error": error,
+    }, status_code=status_code, headers=headers)
 
 async def request_validation_exception_handler(request: Request, exc: RequestValidationError) -> Response:
     return JSONResponse(
