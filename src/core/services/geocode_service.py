@@ -9,7 +9,7 @@ class GeocodeService:
     def __init__(
             self,
             geocoder: ports.IGeocode,
-            cache_store: ports.ICacheStore # Empty cache store
+            cache_store: ports.ICacheStore,
         ):
         assert geocoder is not None, "Geocoder cannot be None"
         assert cache_store is not None, "Cache store cannot be None"

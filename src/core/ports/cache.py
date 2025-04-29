@@ -64,6 +64,7 @@ class ICacheStore(ABC):
     Interface cache store.
     """
 
+    # Geocode Services
     @abstractmethod
     def get_geocode(self, address: str) -> Optional[List[domain.GeocodeResult]]:
         """
@@ -75,3 +76,17 @@ class ICacheStore(ABC):
         """
         Set the geocode for a given address.
         """
+    
+    # User
+    @abstractmethod
+    def set_user(self, user: domain.User) -> None:
+        """
+        Set the user in the cache.
+        """
+    
+    @abstractmethod
+    def get_user(self, user_id: int) -> Optional[domain.User]:
+        """
+        Get the user from the cache.
+        """
+    

@@ -1,6 +1,6 @@
 from pydantic import TypeAdapter    
 import httpx
-from src.internal.api import exceptions
+from src.core import domain
 from typing import *
 
 from src.core import ports
@@ -110,6 +110,6 @@ class GoogleGeocoder(ports.IGeocode):
             }
             ok = resp["status"] == "OK"
             if not ok:
-                raise exceptions.GoogleGeocodeError("Google geocode api status not OK")
+                raise domain.GoogleGeocodeException("Google geocode api status not OK")
 
         return TypeAdapter(List[domain.GeocodeResult]).validate_python(resp["results"])

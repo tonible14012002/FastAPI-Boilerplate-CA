@@ -21,5 +21,19 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./ /code
 
-# -------- replace with comment to run with gunicorn --------
-CMD ["uvicorn", "cmd.server:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# --------- Utils  ---------
+COPY ./docker/helpers/wait-for-it.sh /wait-for-it.sh
+RUN sed -i 's/\r$//g' /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
+# --------- entrypoint ---------
+COPY ./docker/local/api/entrypoint.sh /entrypoint.sh
+RUN sed -i 's/\r$//g' /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# --------- run ---------
+COPY ./docker/local/api/start.sh /start.sh
+RUN sed -i 's/\r$//g' /start.sh
+RUN chmod +x /start.sh
+
+ENTRYPOINT [ "/bin/sh", "/entrypoint.sh" ]
