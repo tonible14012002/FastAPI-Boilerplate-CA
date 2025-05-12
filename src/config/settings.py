@@ -24,10 +24,6 @@ class RedisSettings(BaseSettings):
 class EnvironmentSettings(BaseSettings):
     ENV: str = "dev"
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-
 class Settings(
     PostgresSettings,
     GoogleSettings,
